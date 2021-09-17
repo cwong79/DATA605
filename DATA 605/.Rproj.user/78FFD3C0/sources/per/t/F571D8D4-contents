@@ -1,0 +1,41 @@
+---
+title: "Cwong Assign3"
+author: "Calvin Wong"
+date: "2/16/2019"
+output: html_document
+---
+
+ASSIGNMENT 3
+
+IS 605 FUNDAMENTALS OF COMPUTATIONAL MATHEMATICS - 2014
+
+1. Problem set 1
+(1) What is the rank of the matrix A?
+
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Assign3-1.png)
+
+(2) Given an mxn matrix where m > n, what can be the maximum rank? The mini-
+mum rank, assuming that the matrix is non-zero?
+
+For a rectangular m × n matrix, the largest possible rank is the smaller of the two dimensions. In the case where m >
+ n, the largest possible rank is n.
+
+A non-zero matrix has a minimum of one entry, meaning it has a minimum of one pivot. As the rank is equivalent to the number of pivots, the minimum possible rank is 1.
+
+(3) What is the rank of matrix B?
+
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Assign3-1-3.png)
+
+2. Problem set 2
+Compute the eigenvalues and eigenvectors of the matrix A. You'll need to show your
+work. You'll need to write out the characteristic polynomial and show your solution.
+
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Assign3-2.png)
+
+
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Assign3-2-2.png)
+
+
+
+
+

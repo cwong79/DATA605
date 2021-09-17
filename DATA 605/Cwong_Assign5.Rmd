@@ -1,0 +1,92 @@
+---
+title: "Cwong Assign5"
+author: "Calvin Wong"
+date: "3/1/2019"
+output: html_document
+---
+
+Choose independently two numbers B and C at random from the interval [0, 1] with uniform density. Prove that B and C are proper probability distributions.
+
+Unfortunately, B and C are not properly distributed based on the heavy tails of the normal probability plots. In this instance, there are frequent outliers on both the low and the high end.
+
+Note that the point (B,C) is then chosen at random in the unit square.
+
+```{r}
+library(ggpubr)
+library(magrittr)
+
+B <- runif(10000)
+C <- runif(10000)
+
+B_df<-as.data.frame(B)
+C_df<-as.data.frame(C)
+
+ggplot(B_df, aes(x=B)) + 
+  geom_density() +
+  labs(title = "Density Plot of B", x = "Random Values")
+
+ggplot(C_df, aes(x=C)) + 
+  geom_density() +
+  labs(title = "Density Plot of C", x = "Random Values")
+
+qqnorm(B, pch = 1, frame = FALSE)
+qqline(B, col = "steelblue", lwd = 2)
+
+qqnorm(C, pch = 1, frame = FALSE)
+qqline(C, col = "steelblue", lwd = 2)
+```
+
+Let's calculate the probabilities anyways and see our results.
+
+Find the probability that
+
+(a) B + C < 1/2.
+```{r}
+sum((B+C) < .5)/10000
+```
+
+Here we add both values and determine the probability it will be less than .5 is 12.24%.
+
+(b) BC < 1/2.
+```{r}
+sum((B*C) < .5)/10000
+```
+
+Here we sum both values and determine the probability it will be less than .5 is 84.59%.
+
+(c) |B − C| < 1/2.
+```{r}
+sum(abs(B-C) < .5)/10000
+```
+
+Here we deduct B from C and determine the probability it will be less than .5 is 75.26%.
+
+(d) max{B,C} < 1/2.
+```{r}
+max_cnt = 0
+for(i in 1:length(B))
+{
+  if(max(c(B[i],C[i])) < 0.5)
+  {
+    max_cnt = max_cnt+1
+  }
+}
+max_cnt/length(B)
+```
+
+Max of an ordered pair being less than .5 is 24.68%.
+
+(e) min{B,C} < 1/2.
+```{r}
+min_cnt = 0
+for(i in 1:length(B))
+{
+  if(min(c(B[i],C[i])) < 0.5)
+  {
+    min_cnt = min_cnt+1
+  }
+}
+min_cnt/length(B)
+```
+
+Min of an ordered pair being less than .5 is 74.81%.

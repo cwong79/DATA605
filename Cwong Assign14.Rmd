@@ -1,0 +1,29 @@
+---
+title: "Cwong Assign14"
+author: "Calvin Wong"
+date: "5/12/2019"
+output: html_document
+---
+
+This week, we'll work out some Taylor Series expansions of popular functions.
+
+f(x) = 1 / (1-x)
+
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Assign14-1.png)
+
+-------------------------------------------------------------------------------------
+
+f(x) = e^x
+
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Assign14-2.png)
+
+-------------------------------------------------------------------------------------
+
+
+f(x) = ln(1+x)
+
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Assign14-3.png)
+
+
+
+

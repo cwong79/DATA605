@@ -1,0 +1,56 @@
+---
+title: "Cwong Assign13"
+author: "Calvin Wong"
+date: "4/27/2019"
+output: html_document
+---
+
+1) Use integration by substitution to solve the integral below.
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Assign13-1.png)
+
+2) Biologists are treating a pond contaminated with bacteria. The level of contamination is changing at a rate of
+bacteria per cubic centimeter per day, where t is the number of days since treatment began. Find a
+function N( t ) to estimate the level of contamination if the level after 1 day was 6530 bacteria per cubic centimeter.
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Assign13-2.png)
+
+3) Find the total area of the red rectangles in the figure below, where the 3. equation of the line is f ( x ) = 2x - 9.
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Assign13-3.png)
+
+```{r}
+((8.5)*(8.5)-(9*8.5))-((4.5)*(4.5)-(9*4.5))
+```
+
+
+4) Find the area of the region bounded by the graphs of the given equations.
+y = x^2 - 2x - 2, y = x + 2
+
+```{r}
+x1 = c(-5:5)
+y1 = x1^2 - 2*x1 - 2
+x2 = c(-5:5)
+y2 = x2 + 2
+plot(x1, y1, type="l", xlab="x1,x2", ylab="y1, y2")
+lines(x2, y2, type="l")
+```
+
+
+5) A beauty supply store expects to sell 110 flat irons during the next year. It costs $3.75 to store one flat iron for one year. There is a fixed cost of $8.25 for each order. Find the lot size and the number of orders per year that will minimize inventory costs.
+
+Solution -
+
+x - number of orders/year
+y - lot size per order
+
+Based on the formula, x*y >= 110, x needs to be >= 1 
+
+Cost of inventory per year = 3.75 (yx - 110) + 8.75x = 3.75yx + 8.75*x - 412.5
+
+To keep our cost of inventory per year at the minimum, we need to minimize x and maximize y. From the cost function above, the mimumum value for x is 1 and since y = 110/x, y = 110.
+
+By substitution, minimum cost is -
+
+```{r}
+C = 3.75 * ((110)*(1) - 110) + 8.75*(1)
+C
+```
+

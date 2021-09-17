@@ -1,0 +1,111 @@
+---
+title: "Cwong Assign9"
+author: "Calvin Wong"
+date: "3/30/2019"
+header-includes:
+   - \usepackage{bbm}
+output: html_document
+---
+
+1)
+The price of one share of stock in the Pilsdorff Beer Company (see Exercise
+8.2.12) is given by Yn on the nth day of the year. Finn observes that
+the differences Xn = Yn+1 − Yn appear to be independent random variables
+with a common distribution having mean μ = 0 and variance 2 = 1/4. If
+Y1 = 100, estimate the probability that Y365 is
+
+(a) >= 100.
+
+```{r}
+mean <- 0  
+var <- 1/4
+sd <- sqrt(var)
+n <- 364  
+x <- 0/sqrt(n)
+pnorm(x, mean, sd, lower.tail = FALSE)
+```
+
+(b) >= 110.
+
+```{r}
+x <- 10/sqrt(n)
+pnorm(x, mean, sd, lower.tail = FALSE)
+```
+
+(c) >= 120.
+
+```{r}
+x <- 20/sqrt(n)
+pnorm(x, mean, sd, lower.tail = FALSE)
+```
+
+2)
+Calculate the expected value and variance of the binomial distribution using the moment generating function.
+
+The binomial PMF is defined as (nx)pxqn−x so the moment generating function is:
+
+\begin{align}
+M(t) &= \sum_{x=0}^{n} e^{tx} {n \choose x}p^xq^{n-x} \\
+&= \sum_{x=0}^{n} {n \choose x}(pe^t)^xq^{n-x} \\
+& = (pe^t + q)^n
+\end{align}
+
+To calculate the expected value using the moment generating function we take the first derivative of the MGF and then substitute 0 for t.
+
+\begin{align}
+M'(t) = n(pe^t + q)^{n-1}pe^t \\
+E(X) = M'(0) = np
+\end{align}
+
+To calculate the variance using the moment generating function we take the second derivative of the MGF and then substitute 0 for t to find the second moment. Then we take the second moment minus the first moment squared to find the variance.
+
+\begin{split}
+E(X^2)=M''_X(0) &= n(n-1)(q+pe^0)^{n-2}p^2 e^0+n(q+pe^0)^{n-1}pe^0\\
+&= n(n-1)(1-p+p)^{n-2}p^2+n(1-p+p)^{n-1}p\\
+&= n(n-1)p^2+np
+\end{split}
+
+\begin{align} \\
+Var(X) &= E(X^2) - E(X)^2 \\
+&= n(n-1)p^2 + np - (np)^2 \\
+&= (n^2p^2-1np^2) + np - (np)^2 \\
+&= (np)^2-np^2 + np - (np)^2 \\
+&= np - np^2  \\
+&= np(1-p)
+\end{align}
+
+Therefore, the known definitions for binomial distribution are E(X) = np and Var(X) = np(1 - p).
+
+3)
+Calculate the expected value and variance of the exponential distribution using the moment generating function.
+
+The exponential PDF is defined as \lambda e^{−x \lambda} so the moment generating function is:
+
+\begin{align}
+M(t) &= \int_0^{\infty} e^{tx} \lambda e^{−x \lambda} dx \\
+&= \lambda \int_0^{\infty} e^{-x(\lambda -t)} \\
+&= -\lambda \frac{e^{-x(\lambda -t)}}{\lambda - t} \bigg\rvert _0^\infty \\
+& = \frac{\lambda}{\lambda - t}
+\end{align}
+
+To calculate the expected value using the moment generating function we take the first derivative of the MGF and then substitute 0 for t.
+
+\begin{align}
+M'(t) = \frac{\lambda}{(\lambda - t)^2} \\
+E(X) = M'(0) = \frac{\lambda}{\lambda^2} = \frac{1}{\lambda}
+\end{align}
+
+To calculate the variance using the moment generating function we take the second derivative of the MGF and then substitute 0 for t to find the second moment. Then we take the second moment minus the first moment squared to find the variance.
+
+\begin{split}
+M''(t) = \frac{2\lambda}{(\lambda - t)^3} \\
+E(X^2) = M''(0) = \frac{2\lambda}{\lambda^3} = \frac{2}{\lambda^2} \\
+\end{split}
+
+\begin{align} \\
+Var(X) &= E(X^2) - E(X)^2 \\
+&= \frac{2}{\lambda^2} - \frac{1}{\lambda^2} \\
+&= \frac{1}{\lambda^2} 
+\end{align}
+
+Therefore, the known definitions for binomial distribution are \begin{split} E(X) = \frac{1}{\lambda}, Var(X) = \frac{1}{\lambda^2} \end{split}

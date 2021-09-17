@@ -1,0 +1,41 @@
+---
+title: "Cwong Assign10"
+author: "Calvin Wong"
+date: "4/7/2019"
+output: html_document
+---
+
+Smith is in jail and has 1 dollar; he can get out on bail if he has 8 dollars.
+A guard agrees to make a series of bets with him. If Smith bets A dollars,
+he wins A dollars with probability .4 and loses A dollars with probability .6.
+Find the probability that he wins 8 dollars before losing all of his money if
+
+(a) he bets 1 dollar each time (timid strategy).
+
+Using first-step analysis, we have
+φ(i) = 0.4φ(i+1) + 0.6φ(i−1), i=1,2,3,4,5,6,7 
+φ(0) = 0
+φ(8) = 1
+
+We solve and find the following:
+```{r}
+p <- 0.4
+q <- 0.6
+r <- q/p
+
+for (i in 0:8){
+p <- round((1-r^i)/(1-r^8),4)
+print(paste(i," P:", p))
+}
+```
+
+(b) he bets, each time, as much as possible but not more than necessary to
+bring his fortune up to 8 dollars (bold strategy).
+
+φ(3) = 0.4φ(6) = 0.256
+φ(4) = 0.4φ(8) = 0.4
+φ(6) = 0.4φ(8) + 0.6φ(4) = 0.64
+
+(c) Which strategy gives Smith the better chance of getting out of jail?
+
+When comparing the probabilities of both strategies, the bold strategy gives Smith the better chance of getting out of jail.

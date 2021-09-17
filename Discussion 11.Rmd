@@ -1,0 +1,94 @@
+---
+title: "Discussion 11"
+output:
+  html_document:
+  pdf_document: default
+---
+
+## Batter up 
+
+We'll be looking at data from all 30 Major League Baseball teams and
+examining the linear relationship between runs scored in a season and a number 
+of other player statistics. Our aim will be to summarize these relationships 
+both graphically and numerically in order to find which variable, if any, helps 
+us best predict a team's runs scored in a season.
+
+## The data
+
+Let's load up the data for the 2011 season.
+
+```{r load-data, eval=TRUE}
+load("/Users/cwong79/Dropbox/Public/CUNY/DATA 605/more/mlb11.RData")
+```
+
+In addition to runs scored, there are seven traditionally used variables in the 
+data set: at-bats, hits, home runs, batting average, strikeouts, stolen bases, 
+and wins. There are also three newer variables: on-base percentage, slugging 
+percentage, and on-base plus slugging. 
+
+If the relationship looks linear, we can quantify the strength of the
+relationship with the correlation coefficient. Here I am comparing runs versus at bats.
+
+```{r cor, eval=TRUE}
+cor(mlb11$runs, mlb11$at_bats)
+```
+
+Here is another comparison of runs versus hits.
+
+```{r}
+cor(mlb11$runs, mlb11$hits)
+plot_ss(x = mlb11$hits, y = mlb11$runs)
+```
+
+The hits variable appears to predict runs better than at_bats since the r-squared value is higher and therefore the variability that can be explained by the model is higher.
+
+runs ~ hits = 0.6419
+runs ~ at_bats = 0.3729
+
+```{r}
+m2 <- lm(runs ~ hits, data = mlb11)
+summary(m2)
+```
+
+Bat_avg has the highest R^2 value at 0.6561, therefore, best predicts runs.
+
+```{r}
+plot(mlb11$runs ~ mlb11$bat_avg)
+m3 <- lm(runs ~ bat_avg, data = mlb11)
+abline(m3)
+summary(m3)
+```
+
+new_obs is the best predictor of runs with an R^2 value of 0.9349. The results does make sense because being on base and hitting a ball is a definitive criteria to make a run. 
+
+```{r}
+plot(mlb11$runs ~ mlb11$new_obs)
+m4 <- lm(runs ~ new_obs, data = mlb11)
+abline(m4)
+summary(m4)
+```
+
+-   Check the model diagnostics for the regression model with the variable you 
+    decided was the best predictor for runs.
+
+```{r}
+plot(m4$residuals ~ mlb11$new_obs)
+abline(h = 0, lty = 3)
+```
+
+There seems to be constant variability as the points do not seem to follow any patterns.
+
+```{r}
+hist(m4$residuals)
+```
+
+The histogram of new_obs is nearly symmetrical and unimodal.
+
+```{r}
+qqnorm(m4$residuals)
+qqline(m4$residuals)
+```
+
+The plot shows a very clear linear relationship.
+
+

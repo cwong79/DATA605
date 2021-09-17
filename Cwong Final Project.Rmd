@@ -1,0 +1,244 @@
+---
+title: "Cwong Final Project"
+author: "Calvin Wong"
+date: "5/20/2019"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+Computational Mathematics
+
+
+```{r}
+library(readr)
+library(tidyverse)
+library(corrplot)
+library(pracma)
+library(MASS)
+library(gmodels)
+library(tinytex)
+```
+
+
+Your final is due by the end of the last week of class.  You should post your solutions to your GitHub account or RPubs. You are also expected to make a short presentation via YouTube  and post that recording to the board.  This project will show off your ability to understand the elements of the class. 
+
+#Problem 1.
+Using R, generate a random variable X that has 10,000 random uniform numbers from 1 to N, where N can be any number of your choosing greater than or equal to 6.  Then generate a random variable Y that has 10,000 random normal numbers with a mean of u = O = (N+1)/2.  
+
+```{r}
+N = 100
+X <- runif(10000, min = 1, max = 100)
+Y <- rnorm(10000, mean = (N+1)/2)
+```
+
+
+Probability.   Calculate as a minimum the below probabilities a through c.  Assume the small letter "x" is estimated as the median of the X variable, and the small letter "y" is estimated as the 1st quartile of the Y variable.  Interpret the meaning of all probabilities.
+
+##5 points           
+a.   P(X>x | X>y)		
+
+P(X>x | Y>y) = P(X>x and Y>y) / P(Y>y)
+```{r}
+x <- median(X)
+y <- quantile(Y, .25)
+
+sum(X>x & X>y)/sum(X>y)
+```
+
+##b.  P(X>x, Y>y)	
+
+P(X>x, Y>y) = P(X>x) * P(Y>y)
+
+```{r}
+sum(X>x & Y>y)/length(X)
+```
+
+##c.  P(X<x | X>y)			
+
+P(X<x | X>y) = P(X<x and X>y) / P(X>y)
+
+```{r}
+sum(X<x & X>y)/sum(X>y)
+```
+
+##5 points.   Investigate whether P(X>x and Y>y)=P(X>x)P(Y>y) by building a table and evaluating the marginal and joint probabilities.
+
+```{r}
+tab <- c(sum(X < x & Y < y), sum(X < x & Y > y))
+tab <- rbind(tab, c(sum(X>x & Y < y), sum(X > x & Y > y)))
+tab <- cbind(tab, tab[,1] + tab[,2])
+tab <- rbind(tab, tab[1,] + tab[2,])
+colnames(tab) <- c("Y<y", "Y>y", "Total")
+rownames(tab) <- c("X<x", "X>x", "Total")
+knitr::kable(tab)
+```
+
+
+##5 points.  Check to see if independence holds by using Fisher’s Exact Test and the Chi Square Test.  What is the difference between the two? Which is most appropriate?
+
+```{r}
+fisher.test(table(X>x,Y>y))
+chisq.test(table(X>x,Y>y))
+```
+
+#Problem 2
+
+You are to register for Kaggle.com (free) and compete in the House Prices: Advanced Regression Techniques competition.  https://www.kaggle.com/c/house-prices-advanced-regression-techniques .  I want you to do the following.
+
+```{r}
+test <- read.csv('https://raw.githubusercontent.com/cwong79/DATA605/master/test.csv')
+train <- read.csv('https://raw.githubusercontent.com/cwong79/DATA605/master/train.csv')
+```
+
+
+##5 points.  Descriptive and Inferential Statistics. Provide univariate descriptive statistics and appropriate plots for the training data set.  Provide a scatterplot matrix for at least two of the independent variables and the dependent variable. Derive a correlation matrix for any three quantitative variables in the dataset.  Test the hypotheses that the correlations between each pairwise set of variables is 0 and provide an 80% confidence interval.  Discuss the meaning of your analysis.  Would you be worried about familywise error? Why or why not?
+
+```{r}
+train.df <- data.frame(train)
+trainsub <- train.df[, c(1, 2, 5, 20, 35, 44, 45, 47, 55, 78, 81)]
+t <-cor(trainsub)
+corrplot(t, method="circle")
+```
+
+Base on the correlation graph above, I will choose LotArea and GrLivArea as my independent variables and SalePrice as my dependent.
+
+```{r}
+trainsub1 <- train.df[, c(5, 47, 81)]
+```
+
+###LotArea
+
+Null Hypothesis: The correlation between LotArea and SalePrice is 0
+Alternative Hypothesis: The correlation between LotArea and SalePrice is other than 0
+
+```{r}
+lm1 <- lm(trainsub1$LotArea ~ trainsub1$SalePrice)
+summary(lm1)
+
+hist(trainsub1$LotArea,main="Distribution of LotArea",xlab="Lot Area")
+
+plot(trainsub1$SalePrice, trainsub1$LotArea, xlab="Sale Price", ylab="Lot Area", 
+     main="Scatterplot of Lot Area vs. Sale Price")
+```
+
+```{r}
+cor.test(trainsub1$SalePrice, trainsub1$LotArea, conf.level = 0.8)
+```
+
+Outcome: Accept the alternative hypothesis. The p-value is less than 0.05.
+
+Interpretation of the results: As can be see from the results above the p-value of the test is 2.2e-16, which is less than the significance level α=0.05 . We can conclude that SalePrice and LotArea are significantly correlated with a correlation coefficient of 0.264 and p-value of 2.2e-16.
+
+###GrLivArea
+
+Null Hypothesis: The correlation between GrLivArea and SalePrice is 0
+Alternative Hypothesis: The correlation between GrLivArea and SalePrice is other than 0
+
+```{r}
+lm1 <- lm(trainsub1$GrLivArea ~ trainsub1$SalePrice)
+summary(lm1)
+
+hist(trainsub1$GrLivArea,main="Distribution of GrLivArea",xlab="Living Area")
+
+plot(trainsub1$SalePrice, trainsub1$GrLivArea, xlab="Sale Price", ylab="Living Area", 
+     main="Scatterplot of Living Area vs. Sale Price")
+```
+
+```{r}
+cor.test(trainsub1$SalePrice, trainsub1$GrLivArea, conf.level = 0.8)
+```
+
+Outcome: Accept the alternative hypothesis. The p-value is less than 0.05.
+
+Interpretation of the results: As can be see from the results above the p-value of the test is 2.2e-16, which is less than the significance level α=0.05 . We can conclude that SalePrice and GrLivArea are significantly correlated with a correlation coefficient of 0.708 and p-value of 2.2e-16.
+
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/final-a.png)
+
+The FWE formula states that there is a 9.75% probability there is an error but I would not be worried as it is only applicable to larger series of tests.
+
+##5 points. Linear Algebra and Correlation.  Invert your correlation matrix from above. (This is known as the precision matrix and contains variance inflation factors on the diagonal.) Multiply the correlation matrix by the precision matrix, and then multiply the precision matrix by the correlation matrix. Conduct LU decomposition on the matrix.  
+
+
+```{r}
+t2 <- cor(trainsub1)
+
+precision_mat <- solve(t2)
+
+cmpm <- t2 %*% precision_mat
+cmpm
+
+pmcm <- precision_mat %*% t2
+pmcm
+
+lu(t2)
+```
+
+##5 points.  Calculus-Based Probability & Statistics.  Many times, it makes sense to fit a closed form distribution to data. Select a variable in the Kaggle.com training dataset that is skewed to the right, shift it so that the minimum value is absolutely above zero if necessary. Then load the MASS package and run fitdistr to fit an exponential probability density function.  (See  https://stat.ethz.ch/R-manual/R-devel/library/MASS/html/fitdistr.html ).  Find the optimal value of  for this distribution, and then take 1000 samples from this exponential distribution using this value (e.g., rexp(1000, )). Plot a histogram and compare it with a histogram of your original variable. Using the exponential pdf, find the 5th and 95th percentiles using the cumulative distribution function (CDF). Also generate a 95% confidence interval from the empirical data, assuming normality. Finally, provide the empirical 5th percentile and 95th percentile of the data. Discuss.
+
+```{r}
+hist(trainsub1$SalePrice,main="Distribution of Price",xlab="Sale Price")
+(fd <- fitdistr(trainsub1$SalePrice, "exponential"))
+
+generated <- rexp(1000, rate = fd$estimate)
+
+hist(trainsub1$SalePrice, breaks=30, prob=TRUE, xlab="Sale Price", main="Real Price Distribution")
+hist(generated, breaks=30, prob=TRUE, xlab="Generated Data", main="Generated Price Distribution")
+```
+
+###Find the 5th and 95th percentiles using the cumulative distribution function (CDF)
+
+```{r}
+
+Fn <- ecdf(generated)
+generated[Fn(generated)==0.05]
+generated[Fn(generated)==0.95]
+```
+
+###Generate a 95% confidence interval from the empirical data, assuming normality.
+
+```{r}
+ci(trainsub1$SalePrice, 0.95)
+```
+
+###Provide the empirical 5th percentile and 95th percentile of the data.
+
+```{r}
+quantile(trainsub1$SalePrice, .05)
+quantile(trainsub1$SalePrice, .95)
+```
+
+##10 points.  Modeling.  Build some type of multiple regression model and submit your model to the competition board.  Provide your complete model summary and results with analysis.  Report your Kaggle.com user name and score.
+
+Lets look at numerical variables and see how they stack up against sale price. I wanted to pick variables with higher than .6 correlation and run it through a regression model to see how R values read. Due to the time constraint, I will only look at numerical values although I do realize the importance of categorical ones.
+
+```{r}
+numericVars <- which(sapply(train.df, is.numeric)) 
+numericVarNames <- names(numericVars) 
+
+all_numVar <- train.df[, numericVars] 
+all_numVar <- all_numVar[ -c(1) ]
+cor_numVar <- cor(all_numVar, use="pairwise.complete.obs") 
+
+cor_sorted <- as.matrix(sort(cor_numVar[,'SalePrice'], decreasing = TRUE))
+ 
+CorHigh <- names(which(apply(cor_sorted, 1, function(x) abs(x)>0.6)))
+cor_numVar <- cor_numVar[CorHigh, CorHigh]
+corrplot.mixed(cor_numVar, tl.col="black", tl.pos = "lt")
+```
+
+For building model I've removed the variables with less than 0.6 correlation to sale price. After that I've fitted a multiple regression model. A step wise regression to select best set of predictor variables. My model's R square value is at 0.7609. Since the p-value is less than 0.05 at a 5% significant level, we can surmice that the model is valid.
+
+
+```{r}
+model <- lm(SalePrice ~ ., data = all_numVar[CorHigh])
+summary(model)
+```
+
+
+```{r}
+pairs(~SalePrice+OverallQual+GrLivArea+GarageCars+GarageArea+TotalBsmtSF+X1stFlrSF,data=all_numVar,
+      main="Scatterplot Matrix")
+```
+
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Final-2.png)

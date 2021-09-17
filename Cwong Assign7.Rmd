@@ -1,0 +1,72 @@
+---
+title: "Cwong Assign7"
+author: "Calvin Wong"
+date: "3/15/2019"
+output: html_document
+---
+
+1. Let X1, X2, . . . , Xn be n mutually independent random variables, each of which is uniformly distributed on the integers from 1 to k. Let Y denote the minimum of the Xi’s. Find the distribution of Y.
+
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Discussion 6.png)
+
+2. Your organization owns a copier (future lawyers, etc.) or MRI (future doctors). This machine has a manufacturer’s expected lifetime of 10 years. This means that we expect one failure every ten years. (Include the probability statements and R Code for each part.).
+
+a. What is the probability that the machine will fail after 8 years?. Provide also the expected value and standard deviation. Model as a geometric. (Hint: the probability is equivalent to not failing during the first 8 years..)
+
+Using this formula for geometric, f(x) = P(X=x) = (1−p)^x−1 * p
+
+The probability that the machine will fail after 8 years can be calculated using pgeom function. Expected value is 1/p. And, to calculate SD we can use √(1−p)/p2
+```{r}
+a <- pgeom(8, 0.1, lower.tail = F)
+a
+
+a_expected <- 1/(1/10)
+a_expected
+
+a_sd <- sqrt(9/10/((1/10)^2))
+a_sd
+```
+
+b. What is the probability that the machine will fail after 8 years?. Provide also the expected value and standard deviation. Model as an exponential.
+
+Failure after 8 years: 1 - P(X <= 8).
+```{r}
+b <- 1 - pexp(8,0.1)
+b
+
+b_expected <- 1/(1/10)
+b_expected
+
+b_sd <- sqrt((1/10)^-2)
+b_sd
+```
+
+
+c. What is the probability that the machine will fail after 8 years?. Provide also the expected value and standard deviation. Model as a binomial. (Hint: 0 success in 8 years)
+
+X ~ B(8, 0.1) P(X = 0), to calculate standard deviation we can use √np∗(1−p)
+```{r}
+c = dbinom(0, 8, 0.1) 
+c
+
+c_expected <- 8 * 0.1
+c_expected
+
+c_sd <- sqrt((8 * 0.1) * (1 - 0.1))
+c_sd
+```
+
+d. What is the probability that the machine will fail after 8 years?. Provide also the expected value and standard deviation. Model as a Poisson.
+
+X ~ P(0.8), following Poisson distribution mean is 0.8 and standard deviation is square root of mean.
+```{r}
+d = ppois(0,0.8)
+d
+
+d_expected <- 0.8
+d_expected
+
+d_sd <- sqrt(0.8)
+d_sd
+```
+

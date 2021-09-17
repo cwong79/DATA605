@@ -1,0 +1,40 @@
+---
+title: "Cwong Assign8"
+author: "Calvin Wong"
+date: "3/23/2019"
+output: html_document
+---
+
+A company buys 100 lightbulbs, each of which has an exponential lifetime of
+1000 hours. What is the expected time for the first of these bulbs to burn
+out? (See Exercise 10.)
+
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Discussion 8.png)
+
+Assume that X1 and X2 are independent random variables, each having an
+exponential density with parameter . Show that Z = X1 − X2 has density
+fZ(z) = (1/2)e−|z| .
+
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Assign8-2.png)
+
+Let X be a continuous random variable with mean μ = 10 and variance
+2 = 100/3. Using Chebyshev’s Inequality, find an upper bound for the
+following probabilities.
+
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Assign8-3.png)
+
+(a) P(|X − 10| >= 2).
+
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Assign8-3a.png)
+
+(b) P(|X − 10| >= 5).
+
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Assign8-3b.png)
+
+(c) P(|X − 10| >= 9).
+
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Assign8-3c.png)
+
+(d) P(|X − 10| >= 20).
+
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Assign8-3d.png)

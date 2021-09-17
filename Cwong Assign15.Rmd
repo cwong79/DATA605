@@ -1,0 +1,62 @@
+---
+title: "Cwong Assign15"
+author: "Calvin Wong"
+date: "5/19/2019"
+output: html_document
+---
+
+1) Find the equation of the regression line for the given points. Round any final values to the nearest hundredth, if necessary.
+( 5.6, 8.8 ), ( 6.3, 12.4 ), ( 7, 14.8 ), ( 7.7, 18.2 ), ( 8.4, 20.8 )
+
+formula = -14.8 + 4.26
+
+```{r}
+df = data.frame(rbind(c( 5.6, 8.8 ), c( 6.3, 12.4 ), c( 7, 14.8 ), c( 7.7, 18.2 ), c( 8.4, 20.8 )))
+
+model <- lm(df$X2 ~ df$X1, df)
+
+plot(df$X2 ~ df$X1, data=df)
+abline(model)
+
+summary(model)
+```
+
+
+2) Find all local maxima, local minima, and saddle points for the function given below. Write your answer(s) in the form
+( x, y, z ). Separate multiple points with a comma.
+f ( x, y ) = 24x - 6xy^2 - 8y^3
+
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Assign15-2.png)
+
+3) A grocery store sells two brands of a product, the "house" brand and a "name" brand. The manager estimates that if she
+sells the "house" brand for x dollars and the "name" brand for y dollars, she will be able to sell 81 - 21x + 17y units of the "house" brand and 40 + 11x - 23y units of the "name" brand.
+
+Step 1. Find the revenue function R ( x, y ).
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Assign15-3.png)
+
+Step 2. What is the revenue if she sells the "house" brand for $2.30 and the "name" brand for $4.10?
+
+```{r}
+x <- 2.3
+y <- 4.1
+
+z <- -21*(x^2) - 23*(y^2) + 28*x*y + 81*x +40*y
+z
+```
+
+
+4) A company has a plant in Los Angeles and a plant in Denver. The firm is committed to produce a total of 96 units of a
+product each week. The total weekly cost is given by C(x, y) = 1/6x^2 + 1/6y^2 + 7x + 25y + 700, where x is the number of
+units produced in Los Angeles and y is the number of units produced in Denver. How many units should be produced in
+each plant to minimize the total weekly cost?
+
+Set up the cost equation as a single variable equation to get the derivative of the cost function with respect to x,
+
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Assign15-4.png)
+
+
+5) Evaluate the double integral on the given region.
+
+Write your answer in exact form without decimals.
+
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Assign15-5.png)

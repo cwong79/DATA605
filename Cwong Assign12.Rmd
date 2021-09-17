@@ -1,0 +1,144 @@
+---
+title: "Cwong Assign12"
+author: "Calvin Wong"
+date: "4/21/2019"
+output: html_document
+---
+
+The attached who.csv dataset contains real-world data from 2008. The variables included follow.
+Country: name of the country
+LifeExp: average life expectancy for the country in years
+InfantSurvival: proportion of those surviving to one year or more
+Under5Survival: proportion of those surviving to five years or more
+TBFree: proportion of the population without TB.
+PropMD: proportion of the population who are MDs
+PropRN: proportion of the population who are RNs
+PersExp: mean personal expenditures on healthcare in US dollars at average exchange rate
+GovtExp: mean government expenditures per capita on healthcare, US dollars at average exchange rate
+TotExp: sum of personal and government expenditures.
+
+```{r}
+who <- read.csv("https://raw.githubusercontent.com/cwong79/DATA605/master/who.csv")
+head(who)
+```
+
+1. Provide a scatterplot of LifeExp~TotExp, and run simple linear regression. Do not transform the variables. Provide and interpret the F statistics, R^2, standard error,and p-values only. Discuss whether the assumptions of simple linear regression met.
+
+```{r}
+life_exp <- lm(LifeExp ~ TotExp, data=who)
+
+plot(LifeExp~TotExp, data=who, 
+     xlab="Total Expenditures", ylab="Life Expectancy",
+     main="Life Expectancy vs Total Expenditures")
+abline(life_exp)
+```
+
+
+```{r}
+summary(life_exp)
+```
+
+
+```{r}
+plot(life_exp$fitted.values, life_exp$residuals, 
+     xlab="Fitted Values", ylab="Residuals",
+     main="Residuals Plot")
+
+qqnorm(life_exp$residuals)
+qqline(life_exp$residuals)
+```
+
+F-statistic: 65.26 on 1 and 188 DF, p-value: 7.714e-14 - the p-value of the model is really low, therefore, to reject the null hypothesis (that Total Expenditure DOES NOT contribute to a country’s Life Expentancy). 
+
+Multiple R-squared: 0.2577, Adjusted R-squared: 0.2537 - The R-squared values tells us that our model only explains around 25% of the response variable (Life expentancy in response to Total Expenditure) around the mean.
+
+Residual standard error: 9.371 on 188 degrees of freedom - 9.371 Residual standard error explains that the SE is high. This means that some of the sample data points are significantly off the fitted line.
+
+Looking at the residuals plot, it is clear that there is no constant variability and that residuals are not normally distributed. This is not a good model to describe the relationship. It is clear from the scatterplot that the relationship is not linear.
+
+
+2. Raise life expectancy to the 4.6 power (i.e., LifeExp^4.6). Raise total expenditures to the 0.06 power (nearly a log transform, TotExp^.06). Plot LifeExp^4.6 as a function of TotExp^.06, and r re-run the simple regression model using the transformed variables. Provide and interpret the F statistics, R^2, standard error, and p-values. Which model is "better?"
+
+```{r}
+
+LifeExp4.6 <- who$LifeExp^4.6
+TotExp0.06 <- who$TotExp^0.06
+
+
+life_exp_new <- lm(LifeExp4.6 ~ TotExp0.06)
+
+
+plot(LifeExp4.6~TotExp0.06, 
+     xlab="Total Expenditures", ylab="Life Expectancy",
+     main="Life Expectancy vs Total Expenditures (Transformed)")
+abline(life_exp_new)
+```
+
+```{r}
+summary(life_exp_new)
+```
+
+```{r}
+plot(life_exp_new$fitted.values, life_exp_new$residuals, 
+     xlab="Fitted Values", ylab="Residuals",
+     main="Residuals Plot")
+
+qqnorm(life_exp_new$residuals)
+qqline(life_exp_new$residuals)
+```
+
+F-statistic: 507.7 on 1 and 188 DF, p-value: < 2.2e-16 - the p-value of the model is low which means we can reject the null hypothesis (that Total Expenditure^0.06 DOES NOT contribute to a country’s Life Expentancy^4.6). Therefore, Expenditure does contribute to the model, much better than the orignial model.
+
+Multiple R-squared: 0.7298, Adjusted R-squared: 0.7283 R-squared value of close to 73% is much better than the first model. This means that the response variable (life expentancy^4.6) explains the model’s variability around the mean 75% of the time.
+
+Residual standard error: 90,490,000 on 188 degrees of freedom. Residual SE is high even though life Expentancy was increased exponentially by 4.6.
+
+Looking at the residuals plot, there is constant variability and the residuals are normally distributed. The Q-Q plot fits better than the original model. When factoring all variabilities, this model performs better.
+
+
+3. Using the results from 3, forecast life expectancy when TotExp^.06=1.5. Then forecast life expectancy when TotExp^.06=2.5.
+
+```{r}
+newdata <- data.frame(TotExp0.06=c(1.5,2.5))
+predict(life_exp_new, newdata,interval="predict")^(1/4.6)
+```
+
+When TotExp^.06=1.5, life expectancy is 63.31153.
+Whhen TotExp^.06=2.5, life expectancy is 86.50645
+
+
+4. Build the following multiple regression model and interpret the F Statistics, R^2, standard error, and p-values. How good is the model?
+
+LifeExp = b0+b1 x PropMd + b2 x TotExp +b3 x PropMD x TotExp
+
+```{r}
+life_exp <- lm(LifeExp ~ PropMD + TotExp + TotExp:PropMD, data=who)
+
+summary(life_exp)
+```
+
+```{r}
+plot(life_exp$fitted.values, life_exp$residuals, 
+     xlab="Fitted Values", ylab="Residuals",
+     main="Residuals Plot")
+
+qqnorm(life_exp$residuals)
+qqline(life_exp$residuals)
+```
+
+F-statistic: 34.49 on 3 and 186 DF, p-value: < 2.2e-16 the F-statistic shows that the p-value is really low (close to zero), which means we can reject the null hypothesis, therefore, state that the response variables do contribute to the true value of the dependent variable.
+
+Multiple R-squared: 0.3574, Adjusted R-squared: 0.3471 - with an adjusted R-squared value of only ~35%, this is not a good model. This means that the response variables in this model account for only ~35% of the variability of the model.
+
+Residual standard error: 8.765 on 186 degrees of freedom - The residual SE is significant at 8.765. Which means that datapoints on the average are off by 8.765 from what the model would have predicted. By this measure, I would have to say the model is not a good fit to its corresponding data points.
+
+Looking at the residuals plot, it is clear that there is no constant variability and that residuals are not normally distributed. The Q-Q plot shows a negative skew. When factoring all the above, this is not a good model to describe the relationship. It is clear from the scatterplot that the relationship is not linear.
+
+5. Forecast LifeExp when PropMD=.03 and TotExp = 14. Does this forecast seem realistic? Why or why not?
+
+```{r}
+newdata <- data.frame(PropMD=0.03, TotExp=14)
+predict(life_exp, newdata,interval="predict")
+```
+
+This forecast does not seem realistic. The prediction is 107.70 years with 95% confidence interval between 84.25 and 131.14. The highest life expectancy in the data is 83 years, therefore, this model should not be used.

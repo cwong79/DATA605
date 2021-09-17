@@ -1,0 +1,68 @@
+---
+title: "Cwong Assign2"
+author: "Calvin Wong"
+date: "2/7/2019"
+output: html_document
+---
+
+ASSIGNMENT 2
+
+IS 605 FUNDAMENTALS OF COMPUTATIONAL MATHEMATICS - 2015
+
+1. Problem set 1
+(1) Show that A^TA ≠ AA^T in general. (Proof and demonstration.)
+
+![](/Users/cwong79/Dropbox/Public/CUNY/DATA 605/Assign2.png)
+
+(2) For a special type of square matrix A, we get A^TA = AA^T . Under what conditions
+could this be true? (Hint: The Identity matrix I is an example of such a matrix).
+
+A symmetric matrix is a square matrix that is equal to its transpose. Formally, where A = A^T.
+
+2. Problem set 2
+Matrix factorization is a very important problem. There are supercomputers built just
+to do matrix factorizations. Every second you are on an airplane, matrices are being
+factorized. Radars that track flights use a technique called Kalman filtering. At the heart
+of Kalman Filtering is a Matrix Factorization operation. Kalman Filters are solving linear
+systems of equations when they track your flight using radars.
+
+Write an R function to factorize a square matrix A into LU or LDU, whichever you
+prefer. Please submit your response in an R Markdown document using our class naming
+convention, E.g. LFulton_Assignment2_PS2.png
+
+You don't have to worry about permuting rows of A and you can assume that A is less
+than 5x5, if you need to hard-code any variables in your code. If you doing the entire
+assignment in R, then please submit only one markdown document for both the problems.
+
+```{r}
+LU <- function(M)
+{
+r = dim(M)[1]
+U = M
+L = matrix(0,r,r) #squaring
+
+  for (x in 1:r)
+  {
+  L[x,x] = 1 
+  }
+
+  for (p in 1:(r-1))
+  {
+    for (i in p:(r-1))                            
+    {
+    mlt = round(((U[i+1,p])/(U[p,p])), digits = 2)
+    L[i+1,p] = mlt 
+      for (j in p:r)                               
+      {  
+      U[i+1,j] = U[i+1,j] - U[p,j] * mlt 
+      }
+    }
+  }
+LU = list("Lower" = L,"Upper" = U)
+return(LU)
+}
+
+A = matrix(c(1,4,-3,-2,8,5,3,4,7), nrow = 3, ncol = 3, byrow = TRUE)
+LU(A)
+```
+

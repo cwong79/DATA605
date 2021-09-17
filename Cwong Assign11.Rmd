@@ -1,0 +1,64 @@
+---
+title: "Cwong Assign11"
+author: "Calvin Wong"
+date: "4/13/2019"
+output: html_document
+---
+
+Using the “cars” dataset in R, build a linear model for stopping distance 
+as a function of speed and replicate the analysis of your textbook chapter 3 
+(visualization, quality evaluation of the model, and residual analysis.)
+
+```{r}
+data(mtcars)
+head(mtcars, 6)
+```
+
+I would like to test if mpg has any influence on qsec. I believe cars 
+with a lower mpg have larger engines and therefore have better quarter-mile times.
+Let's test this theory.
+
+```{r}
+qsecmpg <- lm(mtcars$qsec ~ mtcars$mpg)
+plot(mtcars$qsec,mtcars$mpg)
+abline(qsecmpg)
+```
+
+This linear model seems to fit my theory. Lets use regression to see if we can strengthen the case.
+
+```{r}
+summary(qsecmpg)
+```
+
+In this case, the y-intercept is a0 = 15.3548 and the slope is a1 = 0.1241.
+Thus, the final regression model is:
+
+qsec = 15.3548 + 0.1241 * mpg
+
+For a good model, we typically would like to see a standard error that is at 
+least five to ten times smaller than the corresponding coefficient.
+For example, the standard error for mpg is 2.52 times smaller than
+the coefficient value (0.12414/0.04916 = 2.52). This small ratio means that
+there is high levels of variability in the slope estimate, a1. The standard
+error for the intercept, a0, is 1.02978, which is roughly the same as the 
+estimated value of 15.35477 for this coefficient. These values suggest
+that the estimate of this coefficient for this model does not vary much.
+
+The reported R2 of 0.1753 for this model means that the model only explains 
+17.53 percent of the data’s variation. 
+
+```{r}
+plot(fitted(qsecmpg),resid(qsecmpg))
+```
+
+Overall, this plot tells us that using the mpg as the sole predictor in the 
+regression model does not sufficiently or fully explain the data. There is 
+no observable trend or pattern in the residuals.  
+
+```{r}
+qqnorm(resid(qsecmpg))
+qqline(resid(qsecmpg))
+```
+
+The residuals seem to be normally distributed, the points plotted in this 
+figure seem to follow the straight line well.
